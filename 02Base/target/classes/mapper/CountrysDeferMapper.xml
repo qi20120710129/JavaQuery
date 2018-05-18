@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zywy.dao.CountrysDao">
+    <!--根据国家id 查询国家以及对应的省份 不延迟加载-->
+    <select id="selectCountryById" resultMap="countrysMap">
+        SELECT cid,cname FROM country
+        WHERE cid=#{xxx}
+    </select>
+    <select id="selectProvincialById" resultType="Provincial">
+        SELECT pid,pname FROM provincial
+        where countryid=#{xxx}
+    </select>
+    <resultMap id="countrysMap" type="Countrys">
+        <id property="cId" column="cid"/>
+        <result property="cName" column="cname"/>
+        <!--一个国家对应多个省份-->
+        <collection property="provincials" ofType="Provincial" select="selectProvincialById" column="cid"/>
+    </resultMap>
+
+</mapper>
